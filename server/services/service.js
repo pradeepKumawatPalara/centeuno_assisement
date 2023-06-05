@@ -1,3 +1,5 @@
+const dotenv = require('dotenv')
+dotenv.config();
 const product = require('../model/index.js')
 
 exports.createProduct = async(data) => {
@@ -17,14 +19,14 @@ exports.getProduct = async(data) => {
 
     try {
         console.log(data)
-        let offset = 0,
-            limit = 0;
+        let offset = process.env.offset,
+            limit = process.env.limit;
         if (data.page) // if limit and offset is not in the query parameter
             offset = parseInt(data.page)
         if (data.size)
             limit = parseInt(data.size)
 
-        const product_item = await product.find().skip(offset).limit(limit).select('-_id id item_name item_image item_price ')
+        const product_item = await product.find().skip(offset).limit(limit).select('-_id -__v id item_name item_image item_price ')
 
         return product_item;
     } catch (error) {
@@ -37,7 +39,7 @@ exports.getProduct = async(data) => {
 exports.find = async(id) => {
     try {
         console.log(id)
-        const product_item = await product.findOne({ id: id });
+        const product_item = await product.findOne({ id: id }).select('-_id -createdAt -updatedAt -__v'); //
         return product_item;
     } catch (error) {
         console.log("Something went wrong to fetched data from database");
