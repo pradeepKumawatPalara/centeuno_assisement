@@ -26,7 +26,8 @@ exports.getProduct = async(data) => {
         if (data.size)
             limit = parseInt(data.size)
 
-        const product_item = await product.find().skip(offset).limit(limit).select('-_id -__v id item_name item_image item_price ')
+
+        const product_item = await product.find().skip(offset).limit(limit).select('-_id  id item_name item_image item_price ')
 
         return product_item;
     } catch (error) {
